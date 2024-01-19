@@ -12,7 +12,7 @@ data "aws_ses_email_identity" "SES_EMAIL_ARN" {
 }
 
 resource "aws_cognito_user_pool" "pool" {
-  name = "mypool"
+  name = var.cognito_user_pool_name
   
   password_policy {
     minimum_length = 8
@@ -60,6 +60,9 @@ resource "aws_cognito_user_pool_client" "app_client" {
   allowed_oauth_scopes   = ["openid", "profile", "email"]
   default_redirect_uri   = "https://${var.cognito_user_pool_name}-login"
 
+  supported_identity_providers = ["COGNITO"]
+  allowed_oauth_flows_user_pool_client = true
+
   explicit_auth_flows = [
     "ALLOW_ADMIN_USER_PASSWORD_AUTH",
     "ALLOW_CUSTOM_AUTH",
@@ -67,4 +70,26 @@ resource "aws_cognito_user_pool_client" "app_client" {
     "ALLOW_USER_PASSWORD_AUTH",
     "ALLOW_USER_SRP_AUTH",
   ]
+
+}
+
+
+output "cognito_user_pool_id" {
+  value = aws_cognito_user_pool.pool.id
+}
+
+output "cognito_user_pool_arn" {
+  value = aws_cognito_user_pool.pool.arn
+}
+
+output "cognito_user_pool_domain" {
+  value = aws_cognito_user_pool_domain.pool_domain.domain
+}
+
+output "cognito_user_pool_client_id" {
+  value = aws_cognito_user_pool_client.app_client.id
+}
+
+output "cognito_user_pool_client_name" {
+  value = aws_cognito_user_pool_client.app_client.name
 }
