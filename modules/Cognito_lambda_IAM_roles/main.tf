@@ -22,21 +22,17 @@ resource "aws_iam_policy" "inline_policy" {
   
   policy = <<EOF
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Statement1",
-      "Effect": "Allow",
-      "Action": [
-        "cognito-identity:GetOpenIdTokenForDeveloperIdentity",
-        "cognito-identity:LookupDeveloperIdentity",
-        "cognito-identity:ListIdentities"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "VisualEditor0",
+			"Effect": "Allow",
+			"Action": "cognito-idp:InitiateAuth",
+			"Resource": [
+				"*"
+			]
+		}
+	]
 }
 EOF
 }
