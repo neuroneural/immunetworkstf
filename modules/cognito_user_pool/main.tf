@@ -1,0 +1,70 @@
+
+variable "SNS_email_id" {
+  description = "Name of the security group"
+}
+
+variable "cognito_user_pool_name" {
+  description = "Name for new cognito userpool "
+}
+
+data "aws_ses_email_identity" "SES_EMAIL_ARN" {
+  email = var.SNS_email_id
+}
+
+resource "aws_cognito_user_pool" "pool" {
+  name = "mypool"
+  
+  password_policy {
+    minimum_length = 8
+    require_lowercase = true
+    require_numbers = true
+    require_symbols = true
+    require_uppercase = true
+  }
+
+  account_recovery_setting {
+    recovery_mechanism {
+      name = "verified_email"
+      priority = 1
+    }
+  }
+
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+  }
+
+  email_configuration {
+    email_sending_account = "DEVELOPER"
+    source_arn = data.aws_ses_email_identity.SES_EMAIL_ARN.arn
+  }
+}
+
+resource "aws_cognito_user_pool_domain" "pool_domain" {
+  domain = var.cognito_user_pool_name # Choose a unique prefix for your Cognito domain
+  user_pool_id = aws_cognito_user_pool.pool.id
+}
+
+
+
+resource "aws_cognito_user_pool_client" "app_client" {
+  name = "${var.cognito_user_pool_name}-client"
+  user_pool_id = aws_cognito_user_pool.pool.id
+  generate_secret = false
+
+  callback_urls = [
+    "https://${var.cognito_user_pool_name}-login",
+    "https://${var.cognito_user_pool_name}-logout",
+  ]
+
+  allowed_oauth_flows    = ["code"]
+  allowed_oauth_scopes   = ["openid", "profile", "email"]
+  default_redirect_uri   = "https://${var.cognito_user_pool_name}-login"
+
+  explicit_auth_flows = [
+    "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+    "ALLOW_CUSTOM_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+    "ALLOW_USER_PASSWORD_AUTH",
+    "ALLOW_USER_SRP_AUTH",
+  ]
+}

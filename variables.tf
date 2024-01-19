@@ -1,6 +1,14 @@
-# variables.tf
-
 variable "aws_region" {
-  description = "AWS region where the resources will be created"
-  default     = "us-east-1"
+  description = "Enter AWS region for deployment"
+  type        = string
+}
+
+variable "SNS_email" {
+  description = "Enter Name of the security group"
+  type        = string
+}
+
+variable "user_pool_name" {
+  description = "Enter name for new cognito userpool"
+  type        = string
 }

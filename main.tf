@@ -1,9 +1,11 @@
-# main.tf
-
 provider "aws" {
   region = var.aws_region
 }
 
-module "example_security_group" {
-  source = "./security_group.tf"
+module "cognito_user_pool" {
+  source = "./modules/cognito_user_pool"
+
+  cognito_user_pool_name           = var.user_pool_name
+  SNS_email_id = var.SNS_email
+  # cognito_client_name      = var.user_pool_name
 }
