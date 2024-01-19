@@ -12,6 +12,4 @@ module "cognito_user_pool" {
 
 module "Cognito_lambda_IAM_roles" {
   source = "./modules/Cognito_lambda_IAM_roles"
-
-  cognito_user_pool_id         = module.cognito_user_pool.cognito_user_pool_id
 }

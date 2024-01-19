@@ -1,12 +1,6 @@
 # iam_roles/main.tf
-
-variable "cognito_user_pool_id" {
-  description = "Provode cognito user pool id"
-  type        = string
-}
-
 resource "aws_iam_role" "lambda_execution_role" {
-  name = "lambda_execution_role"
+  name = "cognito_identity_lambda_execution_role"
   
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -23,7 +17,7 @@ resource "aws_iam_role" "lambda_execution_role" {
 
 # IAM Role for Cognito User Pool Client
 resource "aws_iam_policy" "inline_policy" {
-  name        = "inline_policy"
+  name        = "cognito_identity_inline_policy"
   description = "Inline policy for Lambda function"
   
   policy = <<EOF
@@ -39,7 +33,7 @@ resource "aws_iam_policy" "inline_policy" {
         "cognito-identity:ListIdentities"
       ],
       "Resource": [
-        "arn:aws:cognito-identity:your_region:your_account_id:identitypool/${var.cognito_user_pool_id}"
+        "*"
       ]
     }
   ]
