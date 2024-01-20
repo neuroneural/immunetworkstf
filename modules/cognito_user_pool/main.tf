@@ -13,13 +13,19 @@ data "aws_ses_email_identity" "SES_EMAIL_ARN" {
 
 resource "aws_cognito_user_pool" "pool" {
   name = var.cognito_user_pool_name
-  
+  auto_verified_attributes = ["email"]
   password_policy {
     minimum_length = 8
     require_lowercase = true
     require_numbers = true
     require_symbols = true
     require_uppercase = true
+  }
+
+  verification_message_template {
+    default_email_option = "CONFIRM_WITH_LINK"
+    email_subject_by_link  = "${var.cognito_user_pool_name} Account Confirmation"
+    email_message_by_link = "Please confirmation email by this link {##Click Here##}"
   }
 
   account_recovery_setting {
