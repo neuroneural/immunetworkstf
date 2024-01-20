@@ -14,7 +14,6 @@ module "Cognito_lambda_IAM_roles" {
   source = "./modules/Cognito_lambda_IAM_roles"
 }
 
-
 module "Cognito_lambda_function" {
   source = "./modules/Cognito_lambda"
   Lambda_path = "./modules/Cognito_lambda/lambda/lambda_function.zip"
@@ -23,4 +22,8 @@ module "Cognito_lambda_function" {
   cognito_user_pool_id =module.cognito_user_pool.cognito_user_pool_id
   region = var.aws_region
 
+}
+
+module "API_GATE_WAY" {
+  source = "./modules/API_GATE_WAY"  
 }
