@@ -8,16 +8,16 @@ variable "parent_id" {
   type = string
 }
 
-variable "lambda_arn" {
+variable "lambda_invoke_arn" {
   description = "Cognito Lambda Function ARN"
   type = string
 }
+
 resource "aws_api_gateway_resource" "login" {
   rest_api_id = var.rest_api_id
   parent_id   = var.parent_id
   path_part   = "login"
 }
-
 
 resource "aws_api_gateway_method" "post_method" {
   rest_api_id   = var.rest_api_id
@@ -30,7 +30,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   rest_api_id = var.rest_api_id
   resource_id = aws_api_gateway_resource.login.id
   http_method = aws_api_gateway_method.post_method.http_method
-  type                    = "AWS_PROXY"
+  type                    = "AWS"
   integration_http_method = "POST"
-  uri                     = var.lambda_arn
+  uri                     = var.lambda_invoke_arn
 }
