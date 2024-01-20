@@ -47,3 +47,7 @@ resource "aws_iam_role_policy_attachment" "attach_inline_policy" {
   policy_arn = aws_iam_policy.inline_policy.arn
   role       = aws_iam_role.lambda_execution_role.name
 }
+
+output "Cognito_lambda_IAM_role_ARN" {
+  value = aws_iam_role.lambda_execution_role.arn
+}
