@@ -21,7 +21,7 @@ resource "aws_api_gateway_resource" "signup" {
 
 resource "aws_api_gateway_method" "post_method" {
   rest_api_id   = var.rest_api_id
-  resource_id   = aws_api_gateway_resource.login.id
+  resource_id   = aws_api_gateway_resource.signup.id
   http_method   = "POST"
   authorization = "NONE"
 }
