@@ -17,7 +17,12 @@ variable "cognito_user_pool_client_id" {
   description = "cognito user pool client id"
   type = string
 }
-resource "aws_lambda_function" "my_lambda_function" {
+
+variable "region" {
+  description = "cognito user pool region to initialte boto3 calls"
+  type = string
+}
+resource "aws_lambda_function" "Cognito_lambda_function" {
   function_name    = "Cognito_lambda"
   handler          = "handler.lambda_handler"
   runtime          = "python3.8"
@@ -30,6 +35,12 @@ resource "aws_lambda_function" "my_lambda_function" {
     variables = {
       "cognito_user_pool_client_id" = var.cognito_user_pool_client_id
       "cognito_user_pool_id" = var.cognito_user_pool_id
+      "region" = var.region
     }
   }
+}
+
+output "Conito_Lambds_ARN" {
+    value = aws_lambda_function.Cognito_lambda_function.arn
+  
 }

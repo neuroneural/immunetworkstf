@@ -21,5 +21,6 @@ module "Cognito_lambda_function" {
   Cognito_lambda_IAM_role_ARN = module.Cognito_lambda_IAM_roles.Cognito_lambda_IAM_role_ARN
   cognito_user_pool_client_id = module.cognito_user_pool.cognito_user_pool_client_id
   cognito_user_pool_id =module.cognito_user_pool.cognito_user_pool_id
+  region = var.aws_region
 
 }
