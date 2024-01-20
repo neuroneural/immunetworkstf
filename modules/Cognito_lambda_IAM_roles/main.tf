@@ -27,7 +27,7 @@ resource "aws_iam_policy" "inline_policy" {
 		{
 			"Sid": "VisualEditor0",
 			"Effect": "Allow",
-			"Action": ["cognito-idp:InitiateAuth","cognito-idp:SignUp"],
+			"Action": ["cognito-idp:InitiateAuth","cognito-idp:SignUp","cognito-idp:ListUsers"],
 			"Resource": [
 				"*"
 			]

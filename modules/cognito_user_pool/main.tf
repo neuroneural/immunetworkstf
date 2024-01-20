@@ -13,7 +13,9 @@ data "aws_ses_email_identity" "SES_EMAIL_ARN" {
 
 resource "aws_cognito_user_pool" "pool" {
   name = var.cognito_user_pool_name
+
   auto_verified_attributes = ["email"]
+  
   password_policy {
     minimum_length = 8
     require_lowercase = true
