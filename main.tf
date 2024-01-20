@@ -25,5 +25,6 @@ module "Cognito_lambda_function" {
 }
 
 module "API_GATE_WAY" {
-  source = "./modules/API_GATE_WAY"  
+  source = "./modules/API_GATE_WAY"
+  Cognito_lambda_function_ARN = module.Cognito_lambda_function.Conito_Lambda_ARN
 }

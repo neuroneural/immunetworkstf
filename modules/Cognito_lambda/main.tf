@@ -40,7 +40,7 @@ resource "aws_lambda_function" "Cognito_lambda_function" {
   }
 }
 
-output "Conito_Lambds_ARN" {
+output "Conito_Lambda_ARN" {
     value = aws_lambda_function.Cognito_lambda_function.arn
   
 }
