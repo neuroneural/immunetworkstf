@@ -34,3 +34,15 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   integration_http_method = "POST"
   uri                     = var.lambda_invoke_arn
 }
+
+output "login_resource" {
+  value = aws_api_gateway_resource.login
+}
+
+output "login_method_1" {
+  value =   aws_api_gateway_method.post_method.id
+}
+
+output "login_integration_1" {
+  value = aws_api_gateway_integration.lambda_integration.id
+}
