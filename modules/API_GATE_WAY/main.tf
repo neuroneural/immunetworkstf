@@ -25,6 +25,8 @@ resource "aws_api_gateway_deployment" "dev" {
       module.signup.signup_resource,
       module.signup.signup_method_1,
       module.signup.signup_integration_1,
+      module.signup.signup_integration_response_1,
+      module.signup.aws_api_gateway_method_response_1,
       module.login.login_resource,
       module.login.login_method_1,
       module.login.login_integration_1
@@ -47,6 +49,9 @@ resource "aws_api_gateway_stage" "dev" {
 resource "aws_api_gateway_rest_api" "rest_api" {
   name        = "immunetworks"
   description = "REST API's for immunetworks"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
 
