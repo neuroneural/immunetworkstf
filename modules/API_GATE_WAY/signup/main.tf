@@ -43,6 +43,9 @@ resource "aws_api_gateway_method_response" "signup_response_1" {
 
   response_parameters = {
     "method.response.header.Content-Type" = "true"
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin" = true
   }
 
   response_models = {
@@ -58,6 +61,9 @@ resource "aws_api_gateway_integration_response" "signup_integration_response_1" 
 
   response_parameters = {
     "method.response.header.Content-Type" = "'application/json'"
+    "method.response.header.Access-Control-Allow-Headers" =  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
   }
 
   response_templates = {
@@ -65,8 +71,14 @@ resource "aws_api_gateway_integration_response" "signup_integration_response_1" 
   }
 }
 
+resource "aws_api_gateway_deployment" "deployment" {
+  depends_on = [
+    aws_api_gateway_integration.lambda_integration # Add this line
+  ]
 
-
+  rest_api_id = var.rest_api_id
+  stage_name = "dev"
+}
 
 output "signup_resource" {
   value = aws_api_gateway_resource.signup.id
