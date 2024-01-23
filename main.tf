@@ -14,6 +14,10 @@ module "Cognito_lambda_IAM_roles" {
   source = "./modules/Cognito_lambda_IAM_roles"
 }
 
+module "api_lambda_invocation_role" {
+  source = "./modules/GATE_WAY_execution_role"
+}
+
 module "Cognito_lambda_function" {
   source = "./modules/Cognito_lambda"
   Lambda_path = "./modules/Cognito_lambda/lambda/lambda_handler.zip"
@@ -27,4 +31,7 @@ module "Cognito_lambda_function" {
 module "API_GATE_WAY" {
   source = "./modules/API_GATE_WAY"
   Cognito_lambda_function_Invoke_ARN = module.Cognito_lambda_function.Cognito_Lambda_Invoke_ARN
+  API_gateway_lamda_auth_arn = module.api_lambda_invocation_role.API_gateway_lamda_auth_arn
 }
+
+

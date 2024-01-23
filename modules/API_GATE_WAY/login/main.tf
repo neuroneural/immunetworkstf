@@ -13,6 +13,10 @@ variable "lambda_invoke_arn" {
   type = string
 }
 
+variable "API_gateway_lamda_auth_arn" {
+  type = string
+}
+
 resource "aws_api_gateway_resource" "login" {
   rest_api_id = var.rest_api_id
   parent_id   = var.parent_id
@@ -33,16 +37,33 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   type                    = "AWS"
   integration_http_method = "POST"
   uri                     = var.lambda_invoke_arn
+  credentials = var.API_gateway_lamda_auth_arn
 }
 
-output "login_resource" {
-  value = aws_api_gateway_resource.login
+resource "aws_api_gateway_method_response" "login_response_1" {
+  rest_api_id = var.rest_api_id
+  resource_id = aws_api_gateway_resource.login.id
+  http_method = aws_api_gateway_method.post_method.http_method
+  status_code = 200
+
+  response_parameters = {
+    "method.response.header.Content-Type" = "true",
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"  # Adjust this based on your response model
+  }
 }
 
-output "login_method_1" {
-  value =   aws_api_gateway_method.post_method.id
-}
+resource "aws_api_gateway_integration_response" "login_integration_response_1" {
+  rest_api_id = var.rest_api_id
+  resource_id = aws_api_gateway_resource.login.id
+  http_method = aws_api_gateway_method.post_method.http_method
+  status_code = aws_api_gateway_method_response.login_response_1.status_code
 
-output "login_integration_1" {
-  value = aws_api_gateway_integration.lambda_integration.id
+
+  response_templates = {
+    "application/json" = ""  # Adjust this based on your response template
+  }
 }
