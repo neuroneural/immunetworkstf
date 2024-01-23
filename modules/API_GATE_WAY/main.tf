@@ -7,6 +7,10 @@ variable "API_gateway_lamda_auth_arn" {
   type = string
 }
 
+variable "cognito_user_pool_arn" {
+  type = string
+  
+}
 module "login" {
   source = "./login"
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
@@ -23,7 +27,12 @@ module "identityadd" {
   API_gateway_lamda_auth_arn = var.API_gateway_lamda_auth_arn
 }
 
-
+resource "aws_api_gateway_authorizer" "cognito" {
+  name          = "cognito-authorizer"
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  type          = "COGNITO_USER_POOLS"
+  provider_arns = [var.cognito_user_pool_arn]
+}
 
 resource "aws_api_gateway_rest_api" "rest_api" {
   name        = "immunetworks"
