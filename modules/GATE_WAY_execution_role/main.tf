@@ -1,3 +1,8 @@
+variable "Cognito_Lambda_ARN" {
+  description = "ARN of the Lambda function"
+  type = string
+}
+
 # iam_roles/main.tf
 resource "aws_iam_role" "api_gateway_invoke_lambda_execution_role" {
   name = "api_gateway_invoke_lambda_execution_role"
@@ -28,7 +33,7 @@ resource "aws_iam_policy" "inline_policy" {
 			"Sid": "VisualEditor0",
 			"Effect": "Allow",
 			"Action": "lambda:InvokeFunction",
-			"Resource": "arn:aws:lambda:us-east-1:274495818870:function:Cognito_lambda"
+			"Resource": "${var.Cognito_Lambda_ARN}"
 		}
 	]
 }

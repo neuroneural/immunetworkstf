@@ -16,6 +16,7 @@ module "Cognito_lambda_IAM_roles" {
 
 module "api_lambda_invocation_role" {
   source = "./modules/GATE_WAY_execution_role"
+  Cognito_Lambda_ARN = module.Cognito_lambda_function.Cognito_Lambda_ARN
 }
 
 module "Cognito_lambda_function" {
