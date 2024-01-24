@@ -17,6 +17,7 @@ module "Cognito_lambda_IAM_roles" {
 module "api_lambda_invocation_role" {
   source = "./modules/GATE_WAY_execution_role"
   Cognito_Lambda_ARN = module.Cognito_lambda_function.Cognito_Lambda_ARN
+  runs_lambda_ARN = module.runs_lambda.Runs_Lambda_ARN
 }
 
 module "Cognito_lambda_function" {
@@ -34,6 +35,25 @@ module "API_GATE_WAY" {
   Cognito_lambda_function_Invoke_ARN = module.Cognito_lambda_function.Cognito_Lambda_Invoke_ARN
   API_gateway_lamda_auth_arn = module.api_lambda_invocation_role.API_gateway_lamda_auth_arn
   cognito_user_pool_arn = module.cognito_user_pool.cognito_user_pool_arn
+  
+  Runs_Lambda_Invoke_ARN = module.runs_lambda.Runs_Lambda_Invoke_ARN
+  API_gateway_lamda_runs_arn = module.api_lambda_invocation_role.API_gateway_lamda_runs_arn
 }
 
+module "Dynamo_tables" {
+  source = "./modules/dynamo_tables"
+}
+
+module "runs_lambda_IAM_role" {
+  source = "./modules/runs_lambda_IAM_role"
+  Dynamo_db_runs_table_ARN = module.Dynamo_tables.Runs_table_arn
+}
+
+module "runs_lambda" {
+  source = "./modules/runs_lambda"
+  region = var.aws_region
+  Runs_lambda_IAM_role_ARN = module.runs_lambda_IAM_role.runs_lambda_IAM_role_ARN
+  Runs_table = module.Dynamo_tables.Runs_table_name
+  Lambda_path = "./modules/runs_lambda/lambda/lambda_runs_handler.zip"
+}
 
