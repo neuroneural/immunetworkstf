@@ -34,19 +34,24 @@ module "identityadd" {
   API_gateway_lamda_auth_arn = var.API_gateway_lamda_auth_arn
 }
 
-module "runs" {
-  source = "./runs"
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  parent_id = aws_api_gateway_rest_api.rest_api.root_resource_id
-  lambda_invoke_arn = var.Runs_Lambda_Invoke_ARN
-  API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
-}
+
+
 resource "aws_api_gateway_authorizer" "cognito" {
   name          = "cognito-authorizer"
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   type          = "COGNITO_USER_POOLS"
   provider_arns = [var.cognito_user_pool_arn]
 }
+
+module "runs" {
+  source = "./runs"
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  parent_id = aws_api_gateway_rest_api.rest_api.root_resource_id
+  lambda_invoke_arn = var.Runs_Lambda_Invoke_ARN
+  API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
+  authorization = aws_api_gateway_authorizer.cognito.id
+  }
+
 
 resource "aws_api_gateway_rest_api" "rest_api" {
   name        = "immunetworks"

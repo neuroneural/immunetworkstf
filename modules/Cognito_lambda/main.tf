@@ -38,6 +38,8 @@ resource "aws_lambda_function" "Cognito_lambda_function" {
       "region" = var.region
     }
   }
+  timeout      = 300
+  memory_size = 256
 }
 
 output "Cognito_Lambda_ARN" {

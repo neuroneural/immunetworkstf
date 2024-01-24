@@ -33,6 +33,8 @@ resource "aws_lambda_function" "Runs_lambda_function" {
       "region" = var.region
     }
   }
+  timeout      = 300
+  memory_size = 256
 }
 
 output "Runs_Lambda_ARN" {
