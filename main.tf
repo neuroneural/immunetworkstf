@@ -47,6 +47,9 @@ module "Dynamo_tables" {
 module "runs_lambda_IAM_role" {
   source = "./modules/runs_lambda_IAM_role"
   Dynamo_db_runs_table_ARN = module.Dynamo_tables.Runs_table_arn
+  Dynamo_db_active_users_table_ARN = module.Dynamo_tables.active_table_arn
+  Dynamo_db_user_runs_table_ARN = module.Dynamo_tables.user_runs_table_arn
+  Dynamo_db_results_table_ARN = module.Dynamo_tables.results_table_arn
 }
 
 module "runs_lambda" {
