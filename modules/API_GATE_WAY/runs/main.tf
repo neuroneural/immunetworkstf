@@ -142,3 +142,65 @@ resource "aws_api_gateway_integration_response" "runs_integration_response_2" {
     "application/json" = ""  # Adjust this based on your response template
   }
 }
+
+# Runs Put method
+
+resource "aws_api_gateway_method" "put_method" {
+  rest_api_id   = var.rest_api_id
+  resource_id   = aws_api_gateway_resource.runs.id
+  http_method   = "PUT"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = var.authorization
+}
+
+resource "aws_api_gateway_integration" "lambda_integration_2" {
+  rest_api_id = var.rest_api_id
+  resource_id = aws_api_gateway_resource.runs.id
+  http_method = aws_api_gateway_method.put_method.http_method
+  type                    = "AWS"
+  integration_http_method = "PUT"
+  uri                     = var.lambda_invoke_arn
+  credentials = var.API_gateway_lamda_runs_arn
+
+  request_templates = {
+    "application/json" = <<EOT
+{
+    "httpMethod": "$context.httpMethod",
+    "userEmail": "$context.authorizer.claims.email",
+    "resourceName": "$context.resourcePath",
+    "Name" : $input.json('$.Name'),
+    "Description" : $input.json('$.Description'),
+    "Users" : $input.json('$.Users'),
+    "check-Threshold" : "$input.json('$.check-Threshold')"
+}
+EOT
+  }
+}
+
+resource "aws_api_gateway_method_response" "runs_response_3" {
+  rest_api_id = var.rest_api_id
+  resource_id = aws_api_gateway_resource.runs.id
+  http_method = aws_api_gateway_method.put_method.http_method
+  status_code = 200
+
+  response_parameters = {
+    "method.response.header.Content-Type" = "true",
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"  # Adjust this based on your response model
+  }
+}
+
+resource "aws_api_gateway_integration_response" "runs_integration_response_3" {
+  rest_api_id = var.rest_api_id
+  resource_id = aws_api_gateway_resource.runs.id
+  http_method = aws_api_gateway_method.put_method.http_method
+  status_code = aws_api_gateway_method_response.runs_response_3.status_code
+
+
+  response_templates = {
+    "application/json" = ""  # Adjust this based on your response template
+  }
+}
