@@ -6,11 +6,19 @@ variable "Runs_Lambda_Invoke_ARN" {
   type = string
 }
 
+variable "user_list_Lambda_Invoke_ARN" {
+  type = string
+}
+
+
 
 variable "API_gateway_lamda_runs_arn" {
   type = string
 }
 variable "API_gateway_lamda_auth_arn" {
+  type = string
+}
+variable "API_gateway_lamda_user_list_arn" {
   type = string
 }
 
@@ -51,6 +59,15 @@ module "runs" {
   API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
   authorization = aws_api_gateway_authorizer.cognito.id
   }
+
+module "user_runs" {
+  source = "./user_runs"
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  parent_id = aws_api_gateway_rest_api.rest_api.root_resource_id
+  user_list_Lambda_Invoke_ARN = var.user_list_Lambda_Invoke_ARN
+  API_gateway_lamda_user_list_arn = var.API_gateway_lamda_user_list_arn
+  authorization = aws_api_gateway_authorizer.cognito.id
+}
 
 
 resource "aws_api_gateway_rest_api" "rest_api" {

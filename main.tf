@@ -18,6 +18,7 @@ module "api_lambda_invocation_role" {
   source = "./modules/GATE_WAY_execution_role"
   Cognito_Lambda_ARN = module.Cognito_lambda_function.Cognito_Lambda_ARN
   runs_lambda_ARN = module.runs_lambda.Runs_Lambda_ARN
+  user_list_lambda_ARN = module.cognito_list_users_lambda.Runs_Lambda_ARN
 }
 
 module "Cognito_lambda_function" {
@@ -32,11 +33,16 @@ module "Cognito_lambda_function" {
 
 module "API_GATE_WAY" {
   source = "./modules/API_GATE_WAY"
+  cognito_user_pool_arn = module.cognito_user_pool.cognito_user_pool_arn
+  
   Cognito_lambda_function_Invoke_ARN = module.Cognito_lambda_function.Cognito_Lambda_Invoke_ARN
   API_gateway_lamda_auth_arn = module.api_lambda_invocation_role.API_gateway_lamda_auth_arn
-  cognito_user_pool_arn = module.cognito_user_pool.cognito_user_pool_arn
+  
   Runs_Lambda_Invoke_ARN = module.runs_lambda.Runs_Lambda_Invoke_ARN
   API_gateway_lamda_runs_arn = module.api_lambda_invocation_role.API_gateway_lamda_runs_arn
+  
+  user_list_Lambda_Invoke_ARN = module.cognito_list_users_lambda.Runs_Lambda_Invoke_ARN
+  API_gateway_lamda_user_list_arn = module.api_lambda_invocation_role.API_gateway_lamda_user_lists_arn
 }
 
 module "Dynamo_tables" {
