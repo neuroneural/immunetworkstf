@@ -25,18 +25,9 @@ variable "authorization" {
 resource "aws_api_gateway_resource" "runs" {
   rest_api_id = var.rest_api_id
   parent_id   = var.parent_id
-  path_part   = "runs"
+  path_part   = "runs_update"
 }
 
-
-module "GET_method" {
-    source = "./GET"
-    rest_api_id =var.rest_api_id
-    authorization = var.authorization
-    runs_id = aws_api_gateway_resource.runs.id
-    API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
-    lambda_invoke_arn = var.lambda_invoke_arn
-}
 
 module "POST_method" {
     source = "./POST"

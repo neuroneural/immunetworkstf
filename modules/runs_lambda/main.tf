@@ -9,7 +9,18 @@ variable "Runs_lambda_IAM_role_ARN" {
 }
 
 variable "Runs_table" {
-    description = "cognito user pool id"
+    type = string
+}
+
+variable "Results_table" {
+    type = string
+}
+
+variable "User_runs_table" {
+    type = string
+}
+
+variable "Active_users_table" {
     type = string
 }
 
@@ -31,6 +42,9 @@ resource "aws_lambda_function" "Runs_lambda_function" {
     variables = {
       "runs_table" = var.Runs_table
       "region" = var.region
+      "active_users_table" =  var.Active_users_table
+      "results_table" = var.Results_table
+      "user_runs_table" = var.User_runs_table
     }
   }
   timeout      = 300

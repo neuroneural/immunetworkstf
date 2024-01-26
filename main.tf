@@ -62,6 +62,9 @@ module "runs_lambda" {
   region = var.aws_region
   Runs_lambda_IAM_role_ARN = module.runs_lambda_IAM_role.runs_lambda_IAM_role_ARN
   Runs_table = module.Dynamo_tables.Runs_table_name
+  Active_users_table = module.Dynamo_tables.active_table_name
+  Results_table = module.Dynamo_tables.results_table_name
+  User_runs_table = module.Dynamo_tables.user_runs_table_name
   Lambda_path = "./modules/runs_lambda/lambda/lambda_runs_handler.zip"
 }
 
