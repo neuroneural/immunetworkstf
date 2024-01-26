@@ -14,6 +14,19 @@ module "results" {
   source = "./results"
 }
 
+module "last_activiy" {
+  source = "./last_activity"
+}
+
+output "last_Activity_table_arn" {
+  value = module.last_activiy.last_active_table_arn
+}
+
+output "last_Activity_table_name" {
+  value = module.last_activiy.last_active_table_name
+}
+
+
 output "Runs_table_arn" {
   value = module.runs.runs_table_arn
 }

@@ -33,8 +33,8 @@ variable "region" {
   type = string
 }
 
-resource "aws_lambda_function" "Runs_lambda_function" {
-  function_name    = "runs_lambda"
+resource "aws_lambda_function" "user_activity_lambda_function" {
+  function_name    = "user_activity_lambda"
   handler          = "handler.lambda_handler"
   runtime          = "python3.8"
   filename         = var.Lambda_path
@@ -56,10 +56,10 @@ resource "aws_lambda_function" "Runs_lambda_function" {
   memory_size = 256
 }
 
-output "Runs_Lambda_ARN" {
-    value = aws_lambda_function.Runs_lambda_function.arn
+output "user_activity_lambda_ARN" {
+    value = aws_lambda_function.user_activity_lambda_function.arn
 }
 
-output "Runs_Lambda_Invoke_ARN" {
-  value = aws_lambda_function.Runs_lambda_function.invoke_arn
+output "user_activity_lambda_Invoke_ARN" {
+  value = aws_lambda_function.user_activity_lambda_function.invoke_arn
 }

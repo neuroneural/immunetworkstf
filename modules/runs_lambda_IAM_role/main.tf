@@ -12,6 +12,10 @@ variable "Dynamo_db_results_table_ARN" {
     type = string
 }
 
+variable "Dynamo_db_last_active_table_ARN" {
+    type = string
+}
+
 # iam_roles/main.tf
 resource "aws_iam_role" "lambda_execution_role" {
   name = "dynamo_runs_lambda_execution_role"
@@ -46,7 +50,8 @@ resource "aws_iam_policy" "inline_policy" {
 				"${var.Dynamo_db_runs_table_ARN}",
                 "${var.Dynamo_db_results_table_ARN}",
                 "${var.Dynamo_db_user_runs_table_ARN}",
-                "${var.Dynamo_db_active_users_table_ARN}"
+                "${var.Dynamo_db_active_users_table_ARN}",
+                "${var.Dynamo_db_last_active_table_ARN}"
 			]
 		}
 	]

@@ -19,6 +19,7 @@ module "api_lambda_invocation_role" {
   Cognito_Lambda_ARN = module.Cognito_lambda_function.Cognito_Lambda_ARN
   runs_lambda_ARN = module.runs_lambda.Runs_Lambda_ARN
   user_list_lambda_ARN = module.cognito_list_users_lambda.Runs_Lambda_ARN
+  user_activity_lambda_ARN = module.user_activiy_lambda.user_activity_lambda_ARN
 }
 
 module "Cognito_lambda_function" {
@@ -43,6 +44,9 @@ module "API_GATE_WAY" {
   
   user_list_Lambda_Invoke_ARN = module.cognito_list_users_lambda.Runs_Lambda_Invoke_ARN
   API_gateway_lamda_user_list_arn = module.api_lambda_invocation_role.API_gateway_lamda_user_lists_arn
+
+  user_activity_Lambda_Invoke_ARN = module.user_activiy_lambda.user_activity_lambda_Invoke_ARN
+  API_gateway_lamda_user_activity_arn = module.api_lambda_invocation_role.API_gateway_lamda_user_activate_arn
 }
 
 module "Dynamo_tables" {
@@ -55,6 +59,7 @@ module "runs_lambda_IAM_role" {
   Dynamo_db_active_users_table_ARN = module.Dynamo_tables.active_table_arn
   Dynamo_db_user_runs_table_ARN = module.Dynamo_tables.user_runs_table_arn
   Dynamo_db_results_table_ARN = module.Dynamo_tables.results_table_arn
+  Dynamo_db_last_active_table_ARN = module.Dynamo_tables.last_Activity_table_arn
 }
 
 module "runs_lambda" {
@@ -65,7 +70,33 @@ module "runs_lambda" {
   Active_users_table = module.Dynamo_tables.active_table_name
   Results_table = module.Dynamo_tables.results_table_name
   User_runs_table = module.Dynamo_tables.user_runs_table_name
+  Last_active_table = module.Dynamo_tables.last_Activity_table_name
   Lambda_path = "./modules/runs_lambda/lambda/lambda_runs_handler.zip"
+}
+
+module "user_activiy_lambda" {
+  source = "./modules/user_activay_lambda"
+  region = var.aws_region
+  Runs_lambda_IAM_role_ARN = module.runs_lambda_IAM_role.runs_lambda_IAM_role_ARN
+  Runs_table = module.Dynamo_tables.Runs_table_name
+  Active_users_table = module.Dynamo_tables.active_table_name
+  Results_table = module.Dynamo_tables.results_table_name
+  User_runs_table = module.Dynamo_tables.user_runs_table_name
+  Last_active_table = module.Dynamo_tables.last_Activity_table_name
+  Lambda_path = "./modules/user_activay_lambda/lambda/lambda_user_activiy_handler.zip"
+}
+
+
+module "results_lambda" {
+  source = "./modules/results_lambdas"
+  region = var.aws_region
+  Runs_lambda_IAM_role_ARN = module.runs_lambda_IAM_role.runs_lambda_IAM_role_ARN
+  Runs_table = module.Dynamo_tables.Runs_table_name
+  Active_users_table = module.Dynamo_tables.active_table_name
+  Results_table = module.Dynamo_tables.results_table_name
+  User_runs_table = module.Dynamo_tables.user_runs_table_name
+  Last_active_table = module.Dynamo_tables.last_Activity_table_name
+  Lambda_path = "./modules/results_lambdas/post_results/lambda/lambda_post_results_activiy_handler.zip"
 }
 
 module "cognito_list_users_lambda_IAM_role" {
