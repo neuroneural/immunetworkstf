@@ -25,6 +25,13 @@ variable "API_gateway_lamda_results_post_arn"{
 }
 
 
+variable "results_get_activity_Lambda_Invoke_ARN"{
+  type =  string
+}
+variable "API_gateway_lamda_results_get_arn"{
+  type =  string
+}
+
 variable "API_gateway_lamda_runs_arn" {
   type = string
 }
@@ -107,6 +114,8 @@ module "results" {
   lambda_invoke_arn = var.results_post_activity_Lambda_Invoke_ARN
   API_gateway_lamda_runs_arn = var.API_gateway_lamda_results_post_arn
   authorization = aws_api_gateway_authorizer.cognito.id
+  API_gateway_lamda_results_get_arn = var.API_gateway_lamda_results_get_arn
+  results_get_activity_Lambda_Invoke_ARN = var.results_get_activity_Lambda_Invoke_ARN
 }
 
 

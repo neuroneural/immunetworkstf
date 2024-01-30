@@ -21,6 +21,7 @@ module "api_lambda_invocation_role" {
   user_list_lambda_ARN = module.cognito_list_users_lambda.Runs_Lambda_ARN
   user_activity_lambda_ARN = module.user_activiy_lambda.user_activity_lambda_ARN
   user_post_results_lambda_ARN = module.results_lambda.post_results_Lambda_ARN
+  user_get_results_lambda_ARN = module.results_lambda.get_results_Lambda_ARN
 }
 
 module "Cognito_lambda_function" {
@@ -51,6 +52,9 @@ module "API_GATE_WAY" {
 
   results_post_activity_Lambda_Invoke_ARN = module.results_lambda.post_results_Lambda_Invoke_ARN
   API_gateway_lamda_results_post_arn = module.api_lambda_invocation_role.API_gateway_lamda_user_post_results_arn
+
+  results_get_activity_Lambda_Invoke_ARN = module.results_lambda.get_results_Lambda_Invoke_ARN
+  API_gateway_lamda_results_get_arn = module.api_lambda_invocation_role.API_gateway_lamda_user_get_results_arn
 }
 
 module "Dynamo_tables" {
@@ -101,6 +105,7 @@ module "results_lambda" {
   User_runs_table = module.Dynamo_tables.user_runs_table_name
   Last_active_table = module.Dynamo_tables.last_Activity_table_name
   Lambda_path = "./modules/results_lambdas/post_results/lambda/lambda_post_results_activiy_handler.zip"
+  GET_Lambda_path = "./modules/results_lambdas/get_results/lambda/lambda_get_results_activiy_handler.zip"
 }
 
 module "cognito_list_users_lambda_IAM_role" {
