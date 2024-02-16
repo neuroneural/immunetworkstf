@@ -23,6 +23,11 @@ resource "aws_api_gateway_resource" "identityadd" {
   path_part   = "identityadd"
 }
 
+variable "amplify_url" {
+  description = "Enter name for new amplify url for enabling cors"
+  type        = string
+}
+
 resource "aws_api_gateway_method" "post_method" {
   rest_api_id   = var.rest_api_id
   resource_id   = aws_api_gateway_resource.identityadd.id
@@ -38,6 +43,18 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   integration_http_method = "POST"
   uri                     = var.lambda_invoke_arn
   credentials = var.API_gateway_lamda_auth_arn
+
+  request_templates = {
+    "application/json" = <<EOT
+{
+    "httpMethod": "$context.httpMethod",
+    "resourceName": "$context.resourcePath",
+    "USERNAME" : $input.json('$.username'),
+    "PASSWORD" : $input.json('$.password'),
+    "EMAIL": $input.json('$.email')
+}
+EOT
+  }
 }
 
 resource "aws_api_gateway_method_response" "identityadd_response_1" {
@@ -62,8 +79,17 @@ resource "aws_api_gateway_integration_response" "login_integration_response_1" {
   http_method = aws_api_gateway_method.post_method.http_method
   status_code = aws_api_gateway_method_response.identityadd_response_1.status_code
 
-
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'${var.amplify_url}'"
+  }
   response_templates = {
     "application/json" = ""  # Adjust this based on your response template
   }
+}
+
+module "options" {
+  source = "./options"
+  rest_api_id = var.rest_api_id
+  amplify_url = var.amplify_url
+  resource_id = aws_api_gateway_resource.identityadd.id
 }

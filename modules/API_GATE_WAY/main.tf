@@ -46,12 +46,19 @@ variable "cognito_user_pool_arn" {
   type = string
   
 }
+
+variable "amplify_url" {
+  description = "Enter name for new amplify url for enabling cors"
+  type        = string
+}
+
 module "login" {
   source = "./login"
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   parent_id = aws_api_gateway_rest_api.rest_api.root_resource_id
   lambda_invoke_arn = var.Cognito_lambda_function_Invoke_ARN
   API_gateway_lamda_auth_arn = var.API_gateway_lamda_auth_arn
+  amplify_url = var.amplify_url
 }
 
 module "identityadd" {
@@ -60,6 +67,7 @@ module "identityadd" {
   parent_id = aws_api_gateway_rest_api.rest_api.root_resource_id
   lambda_invoke_arn = var.Cognito_lambda_function_Invoke_ARN
   API_gateway_lamda_auth_arn = var.API_gateway_lamda_auth_arn
+  amplify_url = var.amplify_url
 }
 
 
@@ -78,6 +86,7 @@ module "runs" {
   lambda_invoke_arn = var.Runs_Lambda_Invoke_ARN
   API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
   authorization = aws_api_gateway_authorizer.cognito.id
+  amplify_url = var.amplify_url
   }
 
 module "runs_update" {
@@ -87,6 +96,7 @@ module "runs_update" {
   lambda_invoke_arn = var.Runs_Lambda_Invoke_ARN
   API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
   authorization = aws_api_gateway_authorizer.cognito.id
+  amplify_url = var.amplify_url
   }
 
 module "user_runs" {
@@ -96,6 +106,7 @@ module "user_runs" {
   user_list_Lambda_Invoke_ARN = var.user_list_Lambda_Invoke_ARN
   API_gateway_lamda_user_list_arn = var.API_gateway_lamda_user_list_arn
   authorization = aws_api_gateway_authorizer.cognito.id
+  amplify_url = var.amplify_url
 }
 
 module "user_activation" {

@@ -20,6 +20,11 @@ variable "authorization" {
   type = string
 }
 
+variable "amplify_url" {
+  description = "Enter name for new amplify url for enabling cors"
+  type        = string
+}
+
 resource "aws_api_gateway_resource" "user_runs" {
   rest_api_id = var.rest_api_id
   parent_id   = var.parent_id
@@ -74,8 +79,19 @@ resource "aws_api_gateway_integration_response" "runs_integration_response_1" {
   http_method = aws_api_gateway_method.get_method.http_method
   status_code = aws_api_gateway_method_response.runs_response_1.status_code
 
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'${var.amplify_url}'"
+  }
+
 
   response_templates = {
     "application/json" = ""  # Adjust this based on your response template
   }
+}
+
+module "options" {
+  source = "./options"
+  rest_api_id = var.rest_api_id
+  resource_id = aws_api_gateway_resource.user_runs.id
+  amplify_url = var.amplify_url
 }

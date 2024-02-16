@@ -21,6 +21,10 @@ variable "authorization" {
   type = string
 }
 
+variable "amplify_url" {
+  description = "Enter name for new amplify url for enabling cors"
+  type        = string
+}
 
 resource "aws_api_gateway_resource" "runs" {
   rest_api_id = var.rest_api_id
@@ -36,6 +40,7 @@ module "GET_method" {
     runs_id = aws_api_gateway_resource.runs.id
     API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
     lambda_invoke_arn = var.lambda_invoke_arn
+    amplify_url = var.amplify_url
 }
 
 module "POST_method" {
@@ -45,4 +50,13 @@ module "POST_method" {
     runs_id = aws_api_gateway_resource.runs.id
     API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
     lambda_invoke_arn = var.lambda_invoke_arn
+    amplify_url = var.amplify_url
+}
+
+
+module "options" {
+  source = "./options"
+  rest_api_id = var.rest_api_id
+  resource_id = aws_api_gateway_resource.runs.id
+  amplify_url = var.amplify_url
 }

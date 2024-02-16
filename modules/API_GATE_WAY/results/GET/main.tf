@@ -21,7 +21,7 @@ variable "runs_id" {
 resource "aws_api_gateway_method" "get_method" {
   rest_api_id   = var.rest_api_id
   resource_id   = var.runs_id
-  http_method   = "GET"
+  http_method   = "POST"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = var.authorization
 }
@@ -31,7 +31,7 @@ resource "aws_api_gateway_integration" "lambda_integration_1" {
   resource_id = var.runs_id
   http_method = aws_api_gateway_method.get_method.http_method
   type                    = "AWS"
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   uri                     = var.lambda_invoke_arn
   credentials = var.API_gateway_lamda_runs_arn
 

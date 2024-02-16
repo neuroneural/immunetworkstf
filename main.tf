@@ -36,6 +36,7 @@ module "Cognito_lambda_function" {
 
 module "API_GATE_WAY" {
   source = "./modules/API_GATE_WAY"
+  amplify_url = var.amplify_url
   cognito_user_pool_arn = module.cognito_user_pool.cognito_user_pool_arn
   
   Cognito_lambda_function_Invoke_ARN = module.Cognito_lambda_function.Cognito_Lambda_Invoke_ARN

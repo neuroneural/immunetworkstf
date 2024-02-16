@@ -36,3 +36,9 @@ module "POST_method" {
     API_gateway_lamda_runs_arn = var.API_gateway_lamda_runs_arn
     lambda_invoke_arn = var.lambda_invoke_arn
 }
+
+module "options" {
+  source = "./options"
+  rest_api_id = var.rest_api_id
+  resource_id = aws_api_gateway_resource.runs.id
+}

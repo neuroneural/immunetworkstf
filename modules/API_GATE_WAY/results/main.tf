@@ -34,6 +34,12 @@ resource "aws_api_gateway_resource" "results" {
   path_part   = "results"
 }
 
+resource "aws_api_gateway_resource" "agggrad" {
+  rest_api_id = var.rest_api_id
+  parent_id   = var.parent_id
+  path_part   = "agggrad"
+}
+
 
 module "POST_method" {
     source = "./POST"
@@ -48,7 +54,7 @@ module "GET_method" {
     source = "./GET"
     rest_api_id =var.rest_api_id
     authorization = var.authorization
-    runs_id = aws_api_gateway_resource.results.id
+    runs_id = aws_api_gateway_resource.agggrad.id
     API_gateway_lamda_runs_arn = var.API_gateway_lamda_results_get_arn
     lambda_invoke_arn = var.results_get_activity_Lambda_Invoke_ARN
 }

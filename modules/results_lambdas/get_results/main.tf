@@ -33,6 +33,10 @@ variable "region" {
   type = string
 }
 
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
 resource "aws_lambda_function" "get_results_lambda_function" {
   function_name    = "get_results_lambda"
   handler          = "handler.lambda_handler"
@@ -42,6 +46,7 @@ resource "aws_lambda_function" "get_results_lambda_function" {
 
   role = var.Runs_lambda_IAM_role_ARN
 
+  layers = ["arn:aws:lambda:${data.aws_region.current.name}:336392948345:layer:AWSSDKPandas-Python38:13"]
   environment {
     variables = {
       "runs_table" = var.Runs_table
