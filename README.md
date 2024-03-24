@@ -13,6 +13,36 @@ This repository contains Terraform configurations for deploying a distributed tr
 - **Security**: IAM roles are used to manage permissions, ensuring secure access to AWS resources.
 - **Customizable**: Easily customizable to fit specific use cases and requirements.
 
+## Architecture Overview
+
+The architecture follows a microservices-based approach, leveraging serverless computing and managed services offered by AWS. Here's a high-level overview of the architecture:
+
+1. **Amazon Cognito User Pool**:
+   - Responsible for user authentication and management.
+   - Allows users to sign up, sign in, and manage their accounts securely.
+   - Provides user authentication tokens for accessing resources within the system.
+
+2. **AWS Lambda Functions**:
+   - Serverless functions that execute code in response to various events.
+   - Used for handling user activities, managing training runs, and processing results.
+   - Each function is associated with specific API Gateway endpoints for triggering execution.
+
+3. **API Gateway**:
+   - Provides HTTP endpoints for accessing Lambda functions.
+   - Acts as a front-end interface for users to interact with the system.
+   - Routes requests to the appropriate Lambda function based on the API endpoint.
+
+4. **DynamoDB Tables**:
+   - NoSQL database service for storing data related to user activities, training runs, and results.
+   - Tables include schemas for storing user profiles, activity logs, run metadata, and result data.
+   - Ensures scalability, durability, and low-latency access to data.
+
+5. **IAM Roles**:
+   - Manages permissions for accessing AWS resources securely.
+   - Provides fine-grained control over which resources each Lambda function can access.
+   - Ensures least privilege access to AWS services, enhancing security.
+
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
